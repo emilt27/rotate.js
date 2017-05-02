@@ -1,1 +1,1 @@
-# rotate.js
+Rotate.js - API for rotation with inertia.

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #test {
+            width: 200px;
+            height: 200px;
+            background: green;
+        }
+    </style>
+</head>
+<body>
+<div id="test"></div>
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
+<script src="../src/rotate.src.js"></script>
+<script>
+  var rotateObj = new RotateJS({
+    cx: 100,
+    cy: 100,
+    inertia: 0.9
+  });
+  var $test = $('#test');
+
+  rotateObj.on('rotate.start', function(state){
+    console.log('Rotate Start', state);
+    $test.css('transform', 'rotate('+ state.angle + 'deg)');
+  });
+
+  rotateObj.on('rotate.progress', function(state){
+    console.log('Rotate Progress', state);
+    $test.css('transform', 'rotate('+ state.angle + 'deg)');
+  });
+
+  rotateObj.on('rotate.stop', function(state){
+    console.log('Rotate Stop', state);
+    $test.css('transform', 'rotate('+ state.angle + 'deg)');
+  });
+
+  rotateObj.on('rotate.changeDirection', function(direction){
+    console.log('Rotate Direction', direction);
+  });
+
+  function returnFalse() {
+    return false;
+  }
+  
+  function initEvents(touchElement) {
+    if ('ontouchstart' in document.documentElement) {
+        touchElement.addEventListener('touchstart', rotateObj.onRotationStart);
+        touchElement.addEventListener('touchmove', rotateObj.onRotated);
+        touchElement.addEventListener('touchend', rotateObj.onRotationStop);
+        touchElement.addEventListener('touchcancel', rotateObj.onRotationStop);
+        touchElement.addEventListener('dragstart', returnFalse);
+    } else {
+        touchElement.addEventListener('mousedown', rotateObj.onRotationStart);
+        touchElement.addEventListener('mousemove', rotateObj.onRotated);
+        touchElement.addEventListener('mouseup', rotateObj.onRotationStop);
+        touchElement.addEventListener('mouseleave', rotateObj.onRotationStop);
+        touchElement.addEventListener('dragstart', returnFalse);
+    }
+
+    touchElement.ondragstart = returnFalse;
+  }
+
+  initEvents($test.get(0));
+</script>
+</body>
+</html>

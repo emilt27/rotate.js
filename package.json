@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "name": "rotate.js",
+  "version": "0.0.1",
+  "description": "",
+  "author": "Emil Temirov <emil.temirov@litslink.com>",
+  "license": "MIT",
+  "keywords": [],
+  "main": "rotate.js",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-minify": "0.0.15"
+  },
+  "scripts": {
+    "build": "gulp"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "rotate.js",
+  "description": "Rotate.js - JS API for rotation with inertia",
+  "main": "rotate.js",
+  "authors": [
+    "Emil Temirov <emil.temirov@litslink.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "rotate",
+    "rotation",
+    "api",
+    "inertia"
+  ],
+  "homepage": "https://github.com/emilt27/rotate.js",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
