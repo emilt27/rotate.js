@@ -185,7 +185,7 @@
             const angleDiff = this.state.lastAppliedAngle - this.state._angle;
 
             if (Math.abs(angleDiff) >= this.state.minimalAngleChange && this.state.transiting === false) {
-                this._getDirection(this.state.event);
+                this._getDirection();
                 this._triggerOnRotate(angleDiff);
 
                 // Prevents new transition before old is completed
@@ -236,7 +236,9 @@
             return Math.round(degrees * 100) / 100;
         },
 
-        _getDirection: function(event) {
+        _getDirection: function() {
+            const event = this.state.event;
+
             if (event) {
                 const startPoint = this.state.lastMouseEvent;
                 const sAngle = Math.atan2((startPoint.pageY - this.state.cy), (startPoint.pageX - this.state.cx));
