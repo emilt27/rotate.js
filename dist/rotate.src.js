@@ -77,6 +77,7 @@
 
         onRotated: function(event) {
             if (this.state.active === true) {
+                this.state.event = event;
                 if (typeof event.targetTouches !== 'undefined' && typeof event.targetTouches[0] !== 'undefined') {
                     this.state.lastMouseEvent = {
                         pageX: event.targetTouches[0].pageX,
@@ -171,7 +172,7 @@
             me.state.minimalAngleChange = me.state.step !== defaults.step ? me.state.step : defaults.minimalAngleChange;
         },
 
-        _update: function() {
+        _update: function(event) {
             // Calculating angle on requestAnimationFrame only for optimisation purposes
             if (typeof this.state.lastMouseEvent !== 'undefined' && this.state.active === true) {
                 this._updateAngleToMouse(this.state.lastMouseEvent);
@@ -184,10 +185,11 @@
             const angleDiff = this.state.lastAppliedAngle - this.state._angle;
 
             if (Math.abs(angleDiff) >= this.state.minimalAngleChange && this.state.transiting === false) {
+                this._getDirection();
                 this._triggerOnRotate(angleDiff);
 
                 // Prevents new transition before old is completed
-                this._blockTransition();
+                this._blockTransition(this.state.event);
                 this.trigger(EVENT_ROTATE, this.state);
 
                 this.state.lastAppliedAngle = this.state._angle;
@@ -223,8 +225,6 @@
 
                 this.state.speed = this._differenceBetweenAngles(newAngle, oldAngle);
             }
-
-            this._getDirection(event);
         },
 
         _differenceBetweenAngles: function(newAngle, oldAngle) {
