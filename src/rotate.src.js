@@ -135,7 +135,7 @@
         _triggerOnRotate: function() {
             if (typeof this._direction === 'undefined' || this._direction !== this.state.direction){
                 this._direction = this.state.direction;
-                this.trigger(EVENT_CHANGE_DIRECTION, direction);
+                this.trigger(EVENT_CHANGE_DIRECTION, this.state.direction);
             }
 
             this.trigger(EVENT_ROTATE, this.state);
