@@ -132,10 +132,9 @@
             this.onRotationStop = this.onRotationStop.bind(this);
         },
 
-        _triggerOnRotate: function(rotateAngle) {
-            const direction = rotateAngle !== 0 && rotateAngle > 0 ? 1 : -1 || 0;
-
-            if (this.state.direction !== direction) {
+        _triggerOnRotate: function() {
+            if (typeof this._direction === 'undefined' || this._direction !== this.state.direction){
+                this._direction = this.state.direction;
                 this.trigger(EVENT_CHANGE_DIRECTION, direction);
             }
 
@@ -149,6 +148,7 @@
             me.state = {
                 cx: opts.cx,
                 cy: opts.cy,
+                direction: 0,
                 active: false,
                 transiting: false,
                 step: opts.step || defaults.step,
@@ -167,7 +167,7 @@
                 set angle(value) {
                     this._angle = value;
                     this.virtualAngle = value;
-                    me._triggerOnRotate(value);
+                    me._triggerOnRotate();
                 }
             };
 
@@ -190,7 +190,7 @@
 
             if (Math.abs(angleDiff) >= this.state.minimalAngleChange && this.state.transiting === false) {
                 this._getDirection();
-                this._triggerOnRotate(angleDiff);
+                this._triggerOnRotate();
 
                 // Prevents new transition before old is completed
                 this._blockTransition();
@@ -248,8 +248,11 @@
                 const sAngle = Math.atan2((startPoint.pageY - this.state.cy), (startPoint.pageX - this.state.cx));
                 const pAngle = Math.atan2((event.pageY - this.state.cy), (event.pageX - this.state.cx));
                 const angle = (pAngle - sAngle) * (180 / Math.PI);
+                const direction = (angle > 0 && angle < 180) ? 1 : (angle > -180 && angle < 0) ? -1 : 0;
 
-                this.state.direction = (angle > 0 && angle < 1) ? 1 : (angle > -1 && angle < 0) ? -1 : 0;
+                if (direction !== 0) {
+                    this.state.direction = direction;
+                }
             }
 
             this.state.startMouseEvent = event;
