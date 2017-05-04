@@ -251,6 +251,8 @@
 
                 this.state.direction = angle > 0 ? 1 : angle < 0 ? -1 : 0;
             }
+
+            this.state.startMouseEvent = event;
         },
 
         _updateAngle: function() {
