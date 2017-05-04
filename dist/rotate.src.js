@@ -127,7 +127,13 @@
             this.onRotationStop = this.onRotationStop.bind(this);
         },
 
-        _triggerOnRotate: function() {
+        _triggerOnRotate: function(rotateAngle) {
+            const direction = rotateAngle !== 0 && rotateAngle > 0 ? 1 : -1 || 0;
+
+            if (this.state.direction !== direction) {
+                this.trigger(EVENT_CHANGE_DIRECTION, direction);
+            }
+
             this.trigger(EVENT_ROTATE, this.state);
         },
 
@@ -138,7 +144,6 @@
             me.state = {
                 cx: opts.cx,
                 cy: opts.cy,
-                direction: 0,
                 active: false,
                 transiting: false,
                 step: opts.step || defaults.step,
@@ -218,8 +223,6 @@
 
                 this.state.speed = this._differenceBetweenAngles(newAngle, oldAngle);
             }
-
-            this._getDirection(event);
         },
 
         _differenceBetweenAngles: function(newAngle, oldAngle) {
@@ -229,15 +232,6 @@
             var degrees = radians * (180 / Math.PI);
 
             return Math.round(degrees * 100) / 100;
-        },
-
-        _getDirection: function(event) {
-            const startPoint = this.state.lastMouseEvent;
-            const sAngle = Math.atan2((startPoint.pageY - this.state.cy), (startPoint.pageX - this.state.cx));
-            const pAngle = Math.atan2((event.pageY - this.state.cy), (event.pageX - this.state.cx));
-            const angle = (pAngle - sAngle) * 180 / Math.PI;
-
-            this.state.direction = angle > 0 ? 1 : angle < 0 ? -1 : 0;
         },
 
         _updateAngle: function() {
