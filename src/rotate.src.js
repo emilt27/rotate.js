@@ -65,30 +65,20 @@
             this._update();
         },
 
-        onRotationStart: function() {
+        onRotationStart: function(event) {
             this.state.active = true;
             this.state.speed = 0;
             this.state.lastMouseAngle = undefined;
             this.state.lastElementAngle = undefined;
             this.state.lastMouseEvent = undefined;
+            this.state.startMouseEvent = this._normalizeEvent(event);
 
             this.trigger(EVENT_ROTATE_START, this.state);
         },
 
         onRotated: function(event) {
             if (this.state.active === true) {
-                this.state.event = event;
-                if (typeof event.targetTouches !== 'undefined' && typeof event.targetTouches[0] !== 'undefined') {
-                    this.state.lastMouseEvent = {
-                        pageX: event.targetTouches[0].pageX,
-                        pageY: event.targetTouches[0].pageY
-                    };
-                } else {
-                    this.state.lastMouseEvent = {
-                        pageX: event.pageX || event.clientX,
-                        pageY: event.pageY || event.clientY
-                    };
-                }
+                this.state.lastMouseEvent = this._normalizeEvent(event);
             }
         },
 
@@ -119,6 +109,20 @@
             this.eventHandlers = this.eventHandlers.filter(function(handler) {
                 return !(event === handler.event && callback === handler.callback && context === handler.context);
             });
+        },
+
+        _normalizeEvent: function(event) {
+            const newEvent = {};
+
+            if (typeof event.targetTouches !== 'undefined' && typeof event.targetTouches[0] !== 'undefined') {
+                newEvent.pageX = event.targetTouches[0].pageX;
+                newEvent.pageY = event.targetTouches[0].pageY;
+            } else {
+                newEvent.pageX = event.pageX || event.clientX;
+                newEvent.pageY = event.pageY || event.clientY;
+            }
+
+            return newEvent;
         },
 
         _bindHandlers: function() {
@@ -172,7 +176,7 @@
             me.state.minimalAngleChange = me.state.step !== defaults.step ? me.state.step : defaults.minimalAngleChange;
         },
 
-        _update: function(event) {
+        _update: function() {
             // Calculating angle on requestAnimationFrame only for optimisation purposes
             if (typeof this.state.lastMouseEvent !== 'undefined' && this.state.active === true) {
                 this._updateAngleToMouse(this.state.lastMouseEvent);
@@ -237,10 +241,10 @@
         },
 
         _getDirection: function() {
-            const event = this.state.event;
+            const event = this.state.lastMouseEvent;
 
             if (event) {
-                const startPoint = this.state.lastMouseEvent;
+                const startPoint = this.state.startMouseEvent;
                 const sAngle = Math.atan2((startPoint.pageY - this.state.cy), (startPoint.pageX - this.state.cx));
                 const pAngle = Math.atan2((event.pageY - this.state.cy), (event.pageX - this.state.cx));
                 const angle = (pAngle - sAngle) * 180 / Math.PI;
