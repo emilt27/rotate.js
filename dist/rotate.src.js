@@ -223,6 +223,8 @@
 
                 this.state.speed = this._differenceBetweenAngles(newAngle, oldAngle);
             }
+
+            this._getDirection(event);
         },
 
         _differenceBetweenAngles: function(newAngle, oldAngle) {
@@ -232,6 +234,15 @@
             var degrees = radians * (180 / Math.PI);
 
             return Math.round(degrees * 100) / 100;
+        },
+
+        _getDirection: function(event) {
+            const startPoint = this.state.lastMouseEvent;
+            const sAngle = Math.atan2((startPoint.pageY - this.state.cy), (startPoint.pageX - this.state.cx));
+            const pAngle = Math.atan2((event.pageY - this.state.cy), (event.pageX - this.state.cx));
+            const angle = (pAngle - sAngle) * 180 / Math.PI;
+
+            this.state.direction = angle > 0 ? 1 : angle < 0 ? -1 : 0;
         },
 
         _updateAngle: function() {
