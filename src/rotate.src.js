@@ -185,11 +185,11 @@
             const angleDiff = this.state.lastAppliedAngle - this.state._angle;
 
             if (Math.abs(angleDiff) >= this.state.minimalAngleChange && this.state.transiting === false) {
-                this._getDirection();
+                this._getDirection(this.state.event);
                 this._triggerOnRotate(angleDiff);
 
                 // Prevents new transition before old is completed
-                this._blockTransition(this.state.event);
+                this._blockTransition();
                 this.trigger(EVENT_ROTATE, this.state);
 
                 this.state.lastAppliedAngle = this.state._angle;
@@ -237,12 +237,14 @@
         },
 
         _getDirection: function(event) {
-            const startPoint = this.state.lastMouseEvent;
-            const sAngle = Math.atan2((startPoint.pageY - this.state.cy), (startPoint.pageX - this.state.cx));
-            const pAngle = Math.atan2((event.pageY - this.state.cy), (event.pageX - this.state.cx));
-            const angle = (pAngle - sAngle) * 180 / Math.PI;
+            if (event) {
+                const startPoint = this.state.lastMouseEvent;
+                const sAngle = Math.atan2((startPoint.pageY - this.state.cy), (startPoint.pageX - this.state.cx));
+                const pAngle = Math.atan2((event.pageY - this.state.cy), (event.pageX - this.state.cx));
+                const angle = (pAngle - sAngle) * 180 / Math.PI;
 
-            this.state.direction = angle > 0 ? 1 : angle < 0 ? -1 : 0;
+                this.state.direction = angle > 0 ? 1 : angle < 0 ? -1 : 0;
+            }
         },
 
         _updateAngle: function() {
