@@ -183,6 +183,7 @@
 
             this._updateAngle();
             this._applySpeed();
+            var stop = this._applyInertia();
 
             const angleDiff = this.state.lastAppliedAngle - this.state._angle;
 
@@ -197,8 +198,9 @@
                 this.state.lastAppliedAngle = this.state._angle;
             }
 
-            this._applyInertia();
-
+            if (stop) {
+                this.trigger(EVENT_ROTATE_STOP, this.state);
+            }
             requestAnimFrame(this._update);
         },
 
@@ -286,18 +288,21 @@
         },
 
         _applyInertia: function() {
+            var stop = false;
+
             if (this.state.inertia > 0) {
                 if (Math.abs(this.state.speed) >= this.state.minimalSpeed) {
                     this.state.speed = this.state.speed * this.state.inertia;
 
                     // Execute onStop callback if stopped
                     if (this.state.active === false && Math.abs(this.state.speed) < this.state.minimalSpeed) {
-                        this.trigger(EVENT_ROTATE_STOP, this.state);
+                        stop = true;
                     }
                 } else if (this.state.speed !== 0) {
                     this.state.speed = 0;
                 }
             }
+            return stop;
         },
 
         _blockTransition: function() {
