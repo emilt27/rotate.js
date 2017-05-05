@@ -84,7 +84,6 @@
 
         onRotationStop: function() {
             this.state.active = false;
-            this.trigger(EVENT_ROTATE_STOP, this.state);
         },
 
         trigger: function(event, data) {
