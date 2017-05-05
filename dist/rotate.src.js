@@ -183,7 +183,6 @@
 
             this._updateAngle();
             this._applySpeed();
-            this._applyInertia();
 
             const angleDiff = this.state.lastAppliedAngle - this.state._angle;
 
@@ -197,6 +196,8 @@
 
                 this.state.lastAppliedAngle = this.state._angle;
             }
+
+            this._applyInertia();
 
             requestAnimFrame(this._update);
         },
