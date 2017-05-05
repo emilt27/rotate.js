@@ -241,10 +241,10 @@
         },
 
         _getDirection: function() {
+            const startPoint = this.state.startMouseEvent;
             const event = this.state.lastMouseEvent;
 
-            if (event) {
-                const startPoint = this.state.startMouseEvent;
+            if (event && startPoint) {
                 const sAngle = Math.atan2((startPoint.pageY - this.state.cy), (startPoint.pageX - this.state.cx));
                 const pAngle = Math.atan2((event.pageY - this.state.cy), (event.pageX - this.state.cx));
                 const angle = (pAngle - sAngle) * (180 / Math.PI);
