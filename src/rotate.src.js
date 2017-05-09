@@ -111,7 +111,7 @@
         },
 
         _normalizeEvent: function(event) {
-            const newEvent = {};
+            var newEvent = {};
 
             if (typeof event.targetTouches !== 'undefined' && typeof event.targetTouches[0] !== 'undefined') {
                 newEvent.pageX = event.targetTouches[0].pageX;
@@ -185,7 +185,7 @@
             this._applySpeed();
             this._applyInertia();
 
-            const angleDiff = this.state.lastAppliedAngle - this.state._angle;
+            var angleDiff = this.state.lastAppliedAngle - this.state._angle;
 
             if (Math.abs(angleDiff) >= this.state.minimalAngleChange && this.state.transiting === false) {
                 this._getDirection();
@@ -240,14 +240,14 @@
         },
 
         _getDirection: function() {
-            const startPoint = this.state.startMouseEvent;
-            const event = this.state.lastMouseEvent;
+            var startPoint = this.state.startMouseEvent;
+            var event = this.state.lastMouseEvent;
 
             if (event && startPoint) {
-                const sAngle = Math.atan2((startPoint.pageY - this.state.cy), (startPoint.pageX - this.state.cx));
-                const pAngle = Math.atan2((event.pageY - this.state.cy), (event.pageX - this.state.cx));
-                const angle = (pAngle - sAngle) * (180 / Math.PI);
-                const direction = (angle > 0 && angle < 180) ? 1 : (angle > -180 && angle < 0) ? -1 : 0;
+                var sAngle = Math.atan2((startPoint.pageY - this.state.cy), (startPoint.pageX - this.state.cx));
+                var pAngle = Math.atan2((event.pageY - this.state.cy), (event.pageX - this.state.cx));
+                var angle = (pAngle - sAngle) * (180 / Math.PI);
+                var direction = (angle > 0 && angle < 180) ? 1 : (angle > -180 && angle < 0) ? -1 : 0;
 
                 if (direction !== 0) {
                     this.state.direction = direction;
